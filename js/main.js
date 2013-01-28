@@ -48,6 +48,7 @@
     Photos.prototype.get = function() {
       return $.ajax("http://" + this.source + "/api/read/json?num=50", {
         type: "jsonp",
+        crossDomain: true,
         success: function(data) {
           return this.format(data);
         },

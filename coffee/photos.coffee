@@ -18,6 +18,7 @@ class Photos
   get : () ->
     $.ajax( "http://#{@source}/api/read/json?num=50", {
       type:"jsonp"
+      crossDomain: true
       success: (data) ->
         @format(data)
       error: () ->
