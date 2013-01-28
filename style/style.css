@@ -1,0 +1,28 @@
+header{
+ 	margin-left:20%;
+ 	margin-right:20%;
+	text-align: center;
+	padding:20px;
+}
+footer{
+	font-size: small;
+	margin-left:20%;
+	margin-right:20%;
+	text-align: center;
+}
+.mainpane{
+	min-height: 400px;
+	text-align: center;
+	background-color: #00C12B;
+	opacity: .4;
+}
+.infoBoxes{
+  min-height: 200px;
+  width:100%;
+  background-color: #0E51A7;
+  opacity: .7;
+
+}
+.seperator{
+	height: 8px;
+}
