@@ -77,6 +77,7 @@
         if (post.type === "photo") {
           if (post.photos.length === 0) {
             this.photoArray.push({
+              tiny: post["photo-url-75"],
               small: post["photo-url-250"],
               big: post["photo-url-1280"]
             });
@@ -85,6 +86,7 @@
             for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
               photo = _ref1[_j];
               this.photoArray.push({
+                tiny: photo["photo-url-75"],
                 small: photo["photo-url-250"],
                 big: photo["photo-url-1280"]
               });
@@ -124,11 +126,12 @@
   projectGallery = new Gallery("projectGallery");
 
   $.when(myPhotos.get()).done(function() {
-    var imgTags;
-    imgTags = domEditor.createTags(myPhotos.photoArray.slice(0, PICTURES_TO_DISPLAY_ON_BUTTON), "img", "small", "src");
-    domEditor.injectInto("#photoButton", imgTags);
+    var smallImgTags, tinyImgTags;
+    tinyImgTags = domEditor.createTags(myPhotos.photoArray.slice(0, PICTURES_TO_DISPLAY_ON_BUTTON), "img", "tiny", "src");
+    domEditor.injectInto("#photoButton", tinyImgTags);
     addPhotoButtonListener();
-    return photoGallery.setup(imgTags);
+    smallImgTags = domEditor.createTags(myPhotos.photoArray.slice(0, PICTURES_TO_DISPLAY_ON_BUTTON), "img", "small", "src");
+    return photoGallery.setup(smallImgTags);
   });
 
   addPhotoButtonListener = function() {
