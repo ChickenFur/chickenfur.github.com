@@ -24,26 +24,23 @@ footer{
 .mainpane{
 	min-height: 800px;
 	text-align: center;
-	background-color: #FFF;
-	
-	
+	background-color: #FFF;	
 }
-
 .seperator{
 	height: 8px;
 }
-
 .buttons{
 	width: 250px;
 	height: 305px;
-	border: dotted 1px black;
 	opacity: 1;
 	
 }
-
 .buttonContainer{
 	display: inline-block;
 	margin-left: 4%;
 	margin-right: 4%;
 	margin-top: 10%;
 }
+.buttonContainer:hover{
+	opacity: .5;
+};
