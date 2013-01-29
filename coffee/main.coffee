@@ -1,3 +1,4 @@
 myPhotos = new Photos "wisechicken.tumblr.com"
-myPhotos.get()
-
+$.when(myPhotos.get()).done(()->
+  console.log(myPhotos.photoArray)
+  ) 
