@@ -1,5 +1,5 @@
 body{
-	font-family: helvetica;
+	font-family: 'Open Sans', sans-serif;
 }
 
 header{
@@ -48,6 +48,8 @@ footer{
 	margin-left: 4%;
 	margin-right: 4%;
 	margin-top: 10%;
+	font-size: 2em;
+
 }
 .buttons:hover{
 	opacity: .5;
