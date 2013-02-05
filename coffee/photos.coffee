@@ -1,9 +1,9 @@
-class Photos 
+class Photos   
   constructor: (@source) ->
-  imgLinksRetrieved : false
-  photoArray : []
-  format : (data) =>
-    
+    @NUM_TO_GET = 9
+    @imgLinksRetrieved = false
+    @photoArray = []
+  format : (data) =>    
     for post in data.posts
       if post.type is "photo"
         if post.photos.length is 0
@@ -17,9 +17,9 @@ class Photos
               tiny : photo["photo-url-75"],
               small : photo["photo-url-250"],
               big : photo["photo-url-1280"]}) 
-    imgLinksRetrieved = true
+    @imgLinksRetrieved = true
   get : () =>
-    $.ajax( "http://#{@source}/api/read/json?num=50", {
+    $.ajax( "http://#{@source}/api/read/json?num="+@NUM_TO_GET, {
       dataType:"jsonp"
       crossDomain: true
       success: (data) =>

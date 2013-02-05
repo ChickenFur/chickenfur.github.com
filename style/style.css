@@ -12,6 +12,7 @@ footer{
 	font-size: small;
 	text-align: center;
   width: 100%;
+  font-family: helvetica;
 }
 
 .buttons img {
@@ -55,4 +56,43 @@ footer{
 .buttons:hover{
 	opacity: .5;
 	cursor: pointer;
-};
+}
+
+.centerGallery {
+	position: absolute;
+	top: 5px;
+	left: 5px;
+	padding-bottom: 20px;
+	height: 200%;
+	width : 100%;
+	background-color: gray;
+	
+}
+
+.centerGallery img{
+	margin-left: 5%;
+	margin-top: 2%;
+	z-index: 100;
+}
+
+.backButton{
+	position: fixed;
+	top: 50%;
+	left: 2px;
+	opacity: .5;
+}
+.forwardButton{
+	position:fixed;
+	top: 50%;
+	right: 15px;
+	opacity: .5;
+}
+.closeButton{
+	position:fixed;
+	top: 10px;
+	right: 5px;
+	opacity: .5;
+}
+.closeButton:hover, .forwardButton:hover, .backButton:hover{
+	cursor: pointer;
+}
