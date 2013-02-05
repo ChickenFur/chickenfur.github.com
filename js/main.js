@@ -17,6 +17,18 @@
       return results;
     };
 
+    Manipulater.prototype.wrapTags = function(tagsToWrap, keyDataArray, tagType, key, attr) {
+      var index, n, results, tagsArray, _i, _len;
+      results = "";
+      tagsArray = tagsToWrap.split(">");
+      tagsArray.pop();
+      for (index = _i = 0, _len = tagsArray.length; _i < _len; index = ++_i) {
+        n = tagsArray[index];
+        results += "<" + tagType + " " + attr + "='" + keyDataArray[index][key] + "'> " + n + "> </" + tagType + ">";
+      }
+      return results;
+    };
+
     Manipulater.prototype.injectInto = function(parentDiv, elements) {
       return $("" + parentDiv).append(elements);
     };
@@ -139,6 +151,7 @@
     domEditor.injectInto("#photoButton", tinyImgTags);
     addPhotoButtonListener();
     smallImgTags = domEditor.createTags(myPhotos.photoArray.slice(0, PICTURES_TO_DISPLAY_ON_BUTTON), "img", "small", "src");
+    smallImgTags = domEditor.wrapTags(smallImgTags, myPhotos.photoArray.slice(0, PICTURES_TO_DISPLAY_ON_BUTTON), "a", "big", "href");
     return photoGallery.setup(smallImgTags);
   });
 

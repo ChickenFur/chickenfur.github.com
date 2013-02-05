@@ -22,6 +22,12 @@ $.when(myPhotos.get()).done(()->
       "img", 
       "small", 
       "src")
+    smallImgTags = domEditor.wrapTags(
+      smallImgTags,
+      myPhotos.photoArray.slice(0,PICTURES_TO_DISPLAY_ON_BUTTON),
+      "a",
+      "big",
+      "href")
     photoGallery.setup(smallImgTags)
   )
 
@@ -55,4 +61,5 @@ addProjectButtonListener = () ->
     $("#photoButton > img").addClass("gallery")
     projectGallery.display("body")
     )
+
 
