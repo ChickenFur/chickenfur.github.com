@@ -76,30 +76,35 @@
 
   Photos = (function() {
 
-    function Photos(source, startNum) {
+    function Photos(source) {
       this.source = source;
-      this.startNum = startNum != null ? startNum : 0;
       this.createButton = __bind(this.createButton, this);
+
+      this.cacheNextGallery = __bind(this.cacheNextGallery, this);
 
       this.get = __bind(this.get, this);
 
       this.format = __bind(this.format, this);
 
+      this.currentSetStartNum = 0;
       this.NUM_TO_GET = 9;
       this.imgLinksRetrieved = false;
       this.photoArray = [];
-      this.url = ("http://" + this.source + "/api/read/json?num=") + this.NUM_TO_GET + ("&start=" + this.startNum);
+      this.nextGalleryArray = [];
+      this.url = ("http://" + this.source + "/api/read/json?num=") + this.NUM_TO_GET;
       this.gallery = new Gallery("photoGallery");
+      this.galleryNext = new Gallery("photoGallery2");
     }
 
-    Photos.prototype.format = function(data) {
-      var photo, post, _i, _j, _len, _len1, _ref, _ref1;
+    Photos.prototype.format = function(data, photoArray) {
+      var photo, photoArrays, post, _i, _j, _len, _len1, _ref, _ref1;
+      photoArrays = [this.photoArray, this.nextGalleryArray];
       _ref = data.posts;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         post = _ref[_i];
         if (post.type === "photo") {
           if (post.photos.length === 0) {
-            this.photoArray.push({
+            photoArrays[photoArray].push({
               tiny: post["photo-url-75"],
               small: post["photo-url-250"],
               big: post["photo-url-1280"]
@@ -108,7 +113,7 @@
             _ref1 = post.photos;
             for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
               photo = _ref1[_j];
-              this.photoArray.push({
+              photoArrays[photoArray].push({
                 tiny: photo["photo-url-75"],
                 small: photo["photo-url-250"],
                 big: photo["photo-url-1280"]
@@ -120,17 +125,43 @@
       return this.imgLinksRetrieved = true;
     };
 
-    Photos.prototype.get = function() {
+    Photos.prototype.get = function(startNum, photoArray, callBack) {
       var _this = this;
+      if (startNum == null) {
+        startNum = 0;
+      }
+      if (photoArray == null) {
+        photoArray = 0;
+      }
+      if (startNum !== 0) {
+        this.url = this.url + ("&start=" + startNum);
+      }
       return $.ajax(this.url, {
         dataType: "jsonp",
         crossDomain: true,
         success: function(data) {
-          return _this.format(data);
+          _this.format(data, photoArray);
+          if (callBack) {
+            return callBack();
+          }
         },
         error: function() {
           return console.log("error");
         }
+      });
+    };
+
+    Photos.prototype.cacheNextGallery = function() {
+      var _this = this;
+      return this.get(this.currentSetStartNum + PICTURES_TO_DISPLAY_ON_BUTTON, 1, function() {
+        var smallImgTags;
+        smallImgTags = domEditor.createTags(_this.nextGalleryArray.slice(0, PICTURES_TO_DISPLAY_ON_BUTTON), "img", "small", "src");
+        smallImgTags = domEditor.wrapTags(smallImgTags, _this.nextGalleryArray.slice(0, PICTURES_TO_DISPLAY_ON_BUTTON), "a", "href");
+        _this.galleryNext.setup(smallImgTags);
+        return $(".forwardButton").on("click", function(event) {
+          _this.gallery.hide();
+          return _this.galleryNext.display("body");
+        });
       });
     };
 
@@ -168,7 +199,8 @@
     return $("#photoButton").on("click", function(event) {
       console.log("Photo Clicked");
       $("#photoButton > img").addClass("gallery");
-      return myPhotos.gallery.display("body");
+      myPhotos.gallery.display("body");
+      return myPhotos.cacheNextGallery();
     });
   };
 
@@ -176,7 +208,8 @@
     return $("#projectsButton").on("click", function(event) {
       console.log("Photo Clicked");
       $("#photoButton > img").addClass("gallery");
-      return myProjects.gallery.display("body");
+      myProjects.gallery.display("body");
+      return myProjects.cacheNextGallery();
     });
   };
 

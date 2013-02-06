@@ -1,34 +1,61 @@
 class Photos   
-  constructor: (@source, @startNum=0) ->
+  constructor: (@source) ->
+    @currentSetStartNum = 0
     @NUM_TO_GET = 9
     @imgLinksRetrieved = false
     @photoArray = []
-    @url = "http://#{@source}/api/read/json?num="+@NUM_TO_GET+"&start=#{@startNum}"
+    @nextGalleryArray = []
+    @url = "http://#{@source}/api/read/json?num="+@NUM_TO_GET
     @.gallery = new Gallery "photoGallery"
-  format : (data) =>    
+    @.galleryNext = new Gallery "photoGallery2"
+
+  format : (data, photoArray) =>
+    photoArrays = [@photoArray, @nextGalleryArray]
     for post in data.posts
       if post.type is "photo"
         if post.photos.length is 0
-           @photoArray.push({
+          photoArrays[photoArray].push({
             tiny : post["photo-url-75"],
             small : post["photo-url-250"],
             big : post["photo-url-1280"]})
         else
           for photo in post.photos
-            @photoArray.push({
+            photoArrays[photoArray].push({
               tiny : photo["photo-url-75"],
               small : photo["photo-url-250"],
               big : photo["photo-url-1280"]}) 
     @imgLinksRetrieved = true
-  get : () =>
+  get : (startNum=0, photoArray=0, callBack) =>
+    unless startNum is 0
+      @url = @url + "&start=#{startNum}"
     $.ajax( @url, {
       dataType:"jsonp"
       crossDomain: true
       success: (data) =>
-        @format(data)
+        @format(data, photoArray)
+        if callBack
+          callBack()
       error: () ->
         console.log("error")
     })
+  cacheNextGallery : ()=>
+    @.get(@currentSetStartNum + PICTURES_TO_DISPLAY_ON_BUTTON, 1, () =>
+      smallImgTags = domEditor.createTags(
+        @.nextGalleryArray.slice(0,PICTURES_TO_DISPLAY_ON_BUTTON),
+        "img",
+        "small",
+        "src")
+      smallImgTags = domEditor.wrapTags(
+        smallImgTags,
+        @.nextGalleryArray.slice(0, PICTURES_TO_DISPLAY_ON_BUTTON),
+        "a",
+        "href")
+      @.galleryNext.setup(smallImgTags)
+      $(".forwardButton").on("click", (event) =>
+        @.gallery.hide()
+        @.galleryNext.display("body")
+        )
+    )
   createButton : (container, listener) =>
     tinyImgTags = domEditor.createTags( 
       @.photoArray.slice(0,PICTURES_TO_DISPLAY_ON_BUTTON),

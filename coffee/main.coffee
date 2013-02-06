@@ -23,6 +23,7 @@ addPhotoButtonListener = () ->
     console.log "Photo Clicked"
     $("#photoButton > img").addClass("gallery")
     myPhotos.gallery.display("body")
+    myPhotos.cacheNextGallery()
     )
 
 addProjectButtonListener = () ->
@@ -30,6 +31,7 @@ addProjectButtonListener = () ->
     console.log "Photo Clicked"
     $("#photoButton > img").addClass("gallery")
     myProjects.gallery.display("body")
+    myProjects.cacheNextGallery()
     )
 
 
