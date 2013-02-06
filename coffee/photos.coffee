@@ -1,8 +1,10 @@
 class Photos   
-  constructor: (@source) ->
+  constructor: (@source, @startNum=0) ->
     @NUM_TO_GET = 9
     @imgLinksRetrieved = false
     @photoArray = []
+    @url = "http://#{@source}/api/read/json?num="+@NUM_TO_GET+"&start=#{@startNum}"
+    @.gallery = new Gallery "photoGallery"
   format : (data) =>    
     for post in data.posts
       if post.type is "photo"
@@ -19,7 +21,7 @@ class Photos
               big : photo["photo-url-1280"]}) 
     @imgLinksRetrieved = true
   get : () =>
-    $.ajax( "http://#{@source}/api/read/json?num="+@NUM_TO_GET, {
+    $.ajax( @url, {
       dataType:"jsonp"
       crossDomain: true
       success: (data) =>
@@ -27,3 +29,23 @@ class Photos
       error: () ->
         console.log("error")
     })
+  createButton : (container, listener) =>
+    tinyImgTags = domEditor.createTags( 
+      @.photoArray.slice(0,PICTURES_TO_DISPLAY_ON_BUTTON),
+      "img", 
+      "tiny", 
+      "src")
+    domEditor.injectInto(container, tinyImgTags)
+    listener()
+    smallImgTags = domEditor.createTags( 
+      @.photoArray.slice(0,PICTURES_TO_DISPLAY_ON_BUTTON),
+      "img", 
+      "small", 
+      "src")
+    smallImgTags = domEditor.wrapTags(
+      smallImgTags,
+      @.photoArray.slice(0,PICTURES_TO_DISPLAY_ON_BUTTON),
+      "a",
+      "big",
+      "href")
+    @.gallery.setup(smallImgTags)
