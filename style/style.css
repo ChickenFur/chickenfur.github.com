@@ -96,3 +96,7 @@ footer{
 .closeButton:hover, .forwardButton:hover, .backButton:hover{
 	cursor: pointer;
 }
+#techBlogImg {
+	width: 250px; 
+	height: 305px;
+}

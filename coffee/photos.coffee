@@ -12,6 +12,7 @@ define ["js/gallery", "js/manipulater"], (Gallery, Manipulater) ->
       @galleryNext = new Gallery "photoGallery2"
       @domEditor = new Manipulater()
       @numOfPictures = numToDisplay
+      @smallImgTags
 
     format : (data, photoArray) =>
       photoArrays = [@currentGalleryArray, @nextGalleryArray]
@@ -80,11 +81,12 @@ define ["js/gallery", "js/manipulater"], (Gallery, Manipulater) ->
         "img", 
         "small", 
         "src")
-      smallImgTags = @domEditor.wrapTags(
+      @smallImgTags = @domEditor.wrapTags(
         smallImgTags,
         @currentGalleryArray.slice(0,@numOfPictures),
         "a",
         "big",
         "href")
-      @gallery.setup(smallImgTags)
+    setupGallery : (imgTags) ->
+      @gallery.setup(imgTags)
   return Photos
