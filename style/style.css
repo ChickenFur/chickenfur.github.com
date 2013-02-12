@@ -74,6 +74,13 @@ footer{
 	margin-top: 2%;
 	z-index: 100;
 }
+.centerGallery div{
+	display:inline-block;
+	margin-left: 50px;
+}
+.centerGallery p{
+	text-align: center;
+}
 
 .backButton{
 	position: fixed;

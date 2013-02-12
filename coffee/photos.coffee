@@ -22,7 +22,8 @@ define ["js/gallery", "js/manipulater"], (Gallery, Manipulater) ->
             photoArrays[photoArray].push({
               tiny : post["photo-url-75"],
               small : post["photo-url-250"],
-              big : post["photo-url-1280"]})
+              big : post["photo-url-1280"],
+              caption : post["photo-caption"]})
           else
             for photo in post.photos
               photoArrays[photoArray].push({
@@ -87,6 +88,6 @@ define ["js/gallery", "js/manipulater"], (Gallery, Manipulater) ->
         "a",
         "big",
         "href")
-    setupGallery : (imgTags) ->
-      @gallery.setup(imgTags)
+    setupGallery : () ->
+      @gallery.setup(@smallImgTags)
   return Photos

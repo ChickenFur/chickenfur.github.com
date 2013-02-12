@@ -13,8 +13,23 @@
         return Projects.__super__.constructor.apply(this, arguments);
       }
 
-      Projects.prototype.test = function() {
-        return console.log(test);
+      Projects.prototype.setupGallery = function() {
+        this.addTitle();
+        return this.gallery.setup(this.smallImgTags);
+      };
+
+      Projects.prototype.addTitle = function() {
+        var data, images, index, newImages, noCommas, _i, _len, _ref;
+        images = this.smallImgTags.split('</a>');
+        images.pop();
+        _ref = this.currentGalleryArray;
+        for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
+          data = _ref[index];
+          images[index] = "<div> " + images[index] + ("</a> " + this.currentGalleryArray[index].caption + "</div>");
+        }
+        newImages = images.join();
+        noCommas = newImages.replace(",", "");
+        return this.smallImgTags = noCommas;
       };
 
       return Projects;

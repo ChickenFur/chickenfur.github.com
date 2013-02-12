@@ -10,10 +10,12 @@ require ["js/blog", "js/manipulater", "js/photos", "js/projects"] , (Blog, Manip
   ####
   $.when(myPhotos.get()).done(()->
       myPhotos.createButton("#photoButton", addPhotoButtonListener)
+      myPhotos.setupGallery()
     )
 
   $.when(myProjects.get()).done(()->
       myProjects.createButton('#projectsButton', addProjectButtonListener )
+      myProjects.setupGallery()
     )
 
   ######

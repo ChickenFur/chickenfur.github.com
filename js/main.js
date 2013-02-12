@@ -9,10 +9,12 @@
     myProjects = new Projects("wpdprojects.tumblr.com", PICTURES_TO_DISPLAY_ON_BUTTON);
     myBlogs = Blog;
     $.when(myPhotos.get()).done(function() {
-      return myPhotos.createButton("#photoButton", addPhotoButtonListener);
+      myPhotos.createButton("#photoButton", addPhotoButtonListener);
+      return myPhotos.setupGallery();
     });
     $.when(myProjects.get()).done(function() {
-      return myProjects.createButton('#projectsButton', addProjectButtonListener);
+      myProjects.createButton('#projectsButton', addProjectButtonListener);
+      return myProjects.setupGallery();
     });
     addPhotoButtonListener = function() {
       return $("#photoButton").on("click", function(event) {

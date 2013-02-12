@@ -27,6 +27,7 @@
         this.galleryNext = new Gallery("photoGallery2");
         this.domEditor = new Manipulater();
         this.numOfPictures = numToDisplay;
+        this.smallImgTags;
       }
 
       Photos.prototype.format = function(data, photoArray) {
@@ -40,7 +41,8 @@
               photoArrays[photoArray].push({
                 tiny: post["photo-url-75"],
                 small: post["photo-url-250"],
-                big: post["photo-url-1280"]
+                big: post["photo-url-1280"],
+                caption: post["photo-caption"]
               });
             } else {
               _ref1 = post.photos;
@@ -112,8 +114,11 @@
         this.domEditor.injectInto(container, tinyImgTags);
         listener();
         smallImgTags = this.domEditor.createTags(this.currentGalleryArray.slice(0, this.numOfPictures), "img", "small", "src");
-        smallImgTags = this.domEditor.wrapTags(smallImgTags, this.currentGalleryArray.slice(0, this.numOfPictures), "a", "big", "href");
-        return this.gallery.setup(smallImgTags);
+        return this.smallImgTags = this.domEditor.wrapTags(smallImgTags, this.currentGalleryArray.slice(0, this.numOfPictures), "a", "big", "href");
+      };
+
+      Photos.prototype.setupGallery = function() {
+        return this.gallery.setup(this.smallImgTags);
       };
 
       return Photos;
