@@ -14,5 +14,4 @@ define ["js/photos"], (Photos) ->
       noCommas = newImages.replace(",", "")
       @smallImgTags = noCommas
 
-
   return Projects
