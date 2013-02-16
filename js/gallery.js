@@ -18,6 +18,15 @@
         this.navBar = "<div class='navHeader'><span class='backButton'><img src='./imgs/back.png'></span> \                <span class='forwardButton'><img src='./imgs/forward.png'></span>\                <span class='closeButton'><img src='imgs/close.png'></span></div>";
       }
 
+      Gallery.prototype.setElement = function(newElement) {
+        return this.element = newElement;
+      };
+
+      Gallery.prototype.getElement = function() {
+        var elementCopy;
+        return elementCopy = this.element;
+      };
+
       Gallery.prototype.setup = function(tags) {
         this.element = $("<div id='" + this.name + "'/>");
         this.element.append($("" + this.navBar));

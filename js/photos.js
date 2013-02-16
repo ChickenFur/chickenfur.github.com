@@ -10,6 +10,8 @@
         this.source = source;
         this.createButton = __bind(this.createButton, this);
 
+        this.switchGallery = __bind(this.switchGallery, this);
+
         this.setupNextGalleryImages = __bind(this.setupNextGalleryImages, this);
 
         this.cacheNextGallery = __bind(this.cacheNextGallery, this);
@@ -18,8 +20,9 @@
 
         this.format = __bind(this.format, this);
 
-        this.currentSetStartNum = 0;
+        this.currentGalleryNumber = 1;
         this.NUM_TO_GET = 9;
+        this.currentNumberPostsDownloaded = this.NUM_TO_GET;
         this.numPicturesRetrieved = 0;
         this.allPhotosArray = [];
         this.prevGalleryArray = [];
@@ -28,47 +31,53 @@
         this.url = ("http://" + this.source + "/api/read/json?num=") + this.NUM_TO_GET;
         this.gallery = new Gallery("photoGallery");
         this.galleryNext = new Gallery("photoGallery2");
+        this.galleryPrevious = new Gallery("photoGallery0");
         this.domEditor = new Manipulater();
         this.numOfPictures = numToDisplay;
         this.smallImgTags;
       }
 
-      Photos.prototype.format = function(data, photoArray) {
-        var photo, post, _i, _j, _len, _len1, _ref, _ref1;
+      Photos.prototype.format = function(data) {
+        var photo, post, _i, _len, _ref, _results;
         _ref = data.posts;
+        _results = [];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           post = _ref[_i];
           if (post.type === "photo") {
             if (post.photos.length === 0) {
-              this.allPhotosArray.push({
+              _results.push(this.allPhotosArray.push({
                 tiny: post["photo-url-75"],
                 small: post["photo-url-250"],
                 big: post["photo-url-1280"],
                 caption: post["photo-caption"]
-              });
+              }));
             } else {
-              _ref1 = post.photos;
-              for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-                photo = _ref1[_j];
-                this.allPhotosArray.push({
-                  tiny: photo["photo-url-75"],
-                  small: photo["photo-url-250"],
-                  big: photo["photo-url-1280"]
-                });
-              }
+              _results.push((function() {
+                var _j, _len1, _ref1, _results1;
+                _ref1 = post.photos;
+                _results1 = [];
+                for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+                  photo = _ref1[_j];
+                  _results1.push(this.allPhotosArray.push({
+                    tiny: photo["photo-url-75"],
+                    small: photo["photo-url-250"],
+                    big: photo["photo-url-1280"]
+                  }));
+                }
+                return _results1;
+              }).call(this));
             }
+          } else {
+            _results.push(void 0);
           }
         }
-        return this.numPicturesRetrieved = this.allPhotosArray.length;
+        return _results;
       };
 
-      Photos.prototype.get = function(startNum, photoArray, callBack) {
+      Photos.prototype.get = function(startNum, callBack) {
         var _this = this;
         if (startNum == null) {
           startNum = 0;
-        }
-        if (photoArray == null) {
-          photoArray = 0;
         }
         if (startNum !== 0) {
           this.url = this.url + ("&start=" + startNum);
@@ -89,10 +98,16 @@
       };
 
       Photos.prototype.cacheNextGallery = function() {
-        if (this.numPicturesRetrieved < 18) {
-          return this.get(this.currentSetStartNum + this.numOfPictures, 1, this.setupImages);
+        var _this = this;
+        this.currentGalleryNumber += 1;
+        if (this.allPhotosArray.length < (this.currentGalleryNumber * this.numOfPictures)) {
+          return this.get(this.currentNumberPostsDownloaded + this.NUM_TO_GET, function() {
+            _this.currentNumberPostsDownloaded + _this.NUM_TO_GET;
+            _this.nextGalleryArray = _this.allPhotosArray.slice(_this.numOfPictures * _this.currentGalleryNumber, _this.currentGalleryNumber * _this.numOfPictures + _this.numOfPictures);
+            return _this.setupNextGalleryImages();
+          });
         } else {
-          this.nextGalleryArray = this.allPhotosArray.slice(this.numOfPictures, this.numOfPictures + this.numOfPictures);
+          this.nextGalleryArray = this.allPhotosArray.slice(this.numOfPictures * this.currentGalleryNumber, this.currentGalleryNumber * this.numOfPictures + this.numOfPictures);
           return this.setupNextGalleryImages();
         }
       };
@@ -104,9 +119,16 @@
         smallImgTags = this.domEditor.wrapTags(smallImgTags, this.nextGalleryArray.slice(0, this.numOfPictures), "a", "big", "href");
         this.galleryNext.setup(smallImgTags);
         return $(".forwardButton").on("click", function(event) {
-          _this.gallery.hide();
-          return _this.galleryNext.display("body");
+          return _this.switchGallery();
         });
+      };
+
+      Photos.prototype.switchGallery = function() {
+        this.galleryPrevious.setElement(this.gallery.getElement());
+        this.gallery.setElement(this.galleryNext.getElement());
+        this.gallery.hide();
+        this.gallery.display("body");
+        return this.cacheNextGallery();
       };
 
       Photos.prototype.createButton = function(container, listener) {

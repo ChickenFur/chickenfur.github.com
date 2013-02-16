@@ -5,6 +5,10 @@ define () ->
       @navBar = "<div class='navHeader'><span class='backButton'><img src='./imgs/back.png'></span> \
                 <span class='forwardButton'><img src='./imgs/forward.png'></span>\
                 <span class='closeButton'><img src='imgs/close.png'></span></div>"
+    setElement : (newElement) ->
+      @element = newElement
+    getElement : () ->
+      elementCopy = @element
     setup : (tags) =>
       @element = $("<div id='#{@name}'/>")
       @element.append($("#{@navBar}"))
@@ -17,5 +21,7 @@ define () ->
         )
     hide : () =>
       @element.detach()
+
+    
 
   return Gallery

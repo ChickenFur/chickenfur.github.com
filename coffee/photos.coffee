@@ -1,8 +1,9 @@
 define ["js/gallery", "js/manipulater"], (Gallery, Manipulater) ->  
   class Photos   
     constructor: (@source, numToDisplay) ->
-      @currentSetStartNum = 0
+      @currentGalleryNumber = 1
       @NUM_TO_GET = 9
+      @currentNumberPostsDownloaded = @NUM_TO_GET
       @numPicturesRetrieved=0
       @allPhotosArray = []
       @prevGalleryArray = []
@@ -11,11 +12,12 @@ define ["js/gallery", "js/manipulater"], (Gallery, Manipulater) ->
       @url = "http://#{@source}/api/read/json?num="+@NUM_TO_GET
       @gallery = new Gallery "photoGallery"
       @galleryNext = new Gallery "photoGallery2"
+      @galleryPrevious = new Gallery "photoGallery0"
       @domEditor = new Manipulater()
       @numOfPictures = numToDisplay
       @smallImgTags
 
-    format : (data, photoArray) =>
+    format : (data ) =>
       for post in data.posts
         if post.type is "photo"
           if post.photos.length is 0
@@ -30,8 +32,7 @@ define ["js/gallery", "js/manipulater"], (Gallery, Manipulater) ->
                 tiny : photo["photo-url-75"],
                 small : photo["photo-url-250"],
                 big : photo["photo-url-1280"]}) 
-      @numPicturesRetrieved = @allPhotosArray.length
-    get : (startNum=0, photoArray=0, callBack) =>
+    get : (startNum=0, callBack) =>
       unless startNum is 0
         @url = @url + "&start=#{startNum}"
       $.ajax( @url, {
@@ -45,10 +46,16 @@ define ["js/gallery", "js/manipulater"], (Gallery, Manipulater) ->
           console.log("error")
       })
     cacheNextGallery : ()=>
-      if @numPicturesRetrieved < 18
-        @get(@currentSetStartNum + @numOfPictures, 1, @setupImages)  
+      @currentGalleryNumber += 1
+      if @allPhotosArray.length < (@currentGalleryNumber * @numOfPictures)
+        @get @currentNumberPostsDownloaded + @NUM_TO_GET, () =>  
+          @currentNumberPostsDownloaded + @NUM_TO_GET
+          @nextGalleryArray = @allPhotosArray.slice(@numOfPictures * @currentGalleryNumber,
+            @currentGalleryNumber * @numOfPictures + @numOfPictures) 
+          @setupNextGalleryImages()
       else
-        @nextGalleryArray = @allPhotosArray.slice(@numOfPictures, @numOfPictures + @numOfPictures) 
+        @nextGalleryArray = @allPhotosArray.slice(@numOfPictures * @currentGalleryNumber,
+            @currentGalleryNumber * @numOfPictures + @numOfPictures) 
         @setupNextGalleryImages()
 
     setupNextGalleryImages : () =>
@@ -64,11 +71,15 @@ define ["js/gallery", "js/manipulater"], (Gallery, Manipulater) ->
         "big",
         "href")
       @galleryNext.setup(smallImgTags)
-      $(".forwardButton").on("click", (event) =>
-        #debugger;
-        @gallery.hide()
-        @galleryNext.display("body")
-        )
+      $(".forwardButton").on "click", (event) =>
+        @switchGallery()
+        
+    switchGallery : () =>
+      @galleryPrevious.setElement( @gallery.getElement() )
+      @gallery.setElement( @galleryNext.getElement() )
+      @gallery.hide()
+      @gallery.display("body")
+      @cacheNextGallery()
 
     createButton : (container, listener) =>
       tinyImgTags = @domEditor.createTags( 
