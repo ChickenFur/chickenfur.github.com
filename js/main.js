@@ -21,6 +21,7 @@
         console.log("Photo Clicked");
         $("#photoButton > img").addClass("gallery");
         myPhotos.gallery.display("body");
+        myPhotos.gallery.hidePreviousButton();
         return myPhotos.cacheNextGallery();
       });
     };
@@ -29,6 +30,8 @@
         console.log("Photo Clicked");
         $("#photoButton > img").addClass("gallery");
         myProjects.gallery.display("body");
+        myProjects.gallery.hidePreviousButton();
+        myProjects.gallery.hidePreviousButton();
         return myProjects.cacheNextGallery();
       });
     };

@@ -8,6 +8,12 @@
 
       function Gallery(name) {
         this.name = name;
+        this.showPreviousButton = __bind(this.showPreviousButton, this);
+
+        this.showNextButton = __bind(this.showNextButton, this);
+
+        this.hidePreviousButton = __bind(this.hidePreviousButton, this);
+
         this.hideNextButton = __bind(this.hideNextButton, this);
 
         this.hide = __bind(this.hide, this);
@@ -50,6 +56,18 @@
 
       Gallery.prototype.hideNextButton = function() {
         return $(".forwardButton").hide();
+      };
+
+      Gallery.prototype.hidePreviousButton = function() {
+        return $(".backButton").hide();
+      };
+
+      Gallery.prototype.showNextButton = function() {
+        return $(".forwardButton").show();
+      };
+
+      Gallery.prototype.showPreviousButton = function() {
+        return $(".backButton").show();
       };
 
       return Gallery;

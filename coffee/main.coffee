@@ -26,6 +26,7 @@ require ["js/blog", "js/manipulater", "js/photos", "js/projects"] , (Blog, Manip
       console.log "Photo Clicked"
       $("#photoButton > img").addClass("gallery")
       myPhotos.gallery.display("body")
+      myPhotos.gallery.hidePreviousButton();
       myPhotos.cacheNextGallery()
       )
 
@@ -34,6 +35,8 @@ require ["js/blog", "js/manipulater", "js/photos", "js/projects"] , (Blog, Manip
       console.log "Photo Clicked"
       $("#photoButton > img").addClass("gallery")
       myProjects.gallery.display("body")
+      myProjects.gallery.hidePreviousButton();
+      myProjects.gallery.hidePreviousButton();
       myProjects.cacheNextGallery()
       )
 

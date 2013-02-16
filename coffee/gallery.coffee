@@ -23,7 +23,12 @@ define () ->
       @element.detach()
     hideNextButton : () =>
       $(".forwardButton").hide()
-
+    hidePreviousButton : () =>
+      $(".backButton").hide()
+    showNextButton : () =>
+      $(".forwardButton").show()
+    showPreviousButton : () =>
+      $(".backButton").show()
     
 
   return Gallery

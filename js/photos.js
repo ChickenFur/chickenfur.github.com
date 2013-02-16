@@ -12,9 +12,15 @@
 
         this.switchToNextGallery = __bind(this.switchToNextGallery, this);
 
+        this.switchToPreviousGallery = __bind(this.switchToPreviousGallery, this);
+
         this.setupNextGalleryImages = __bind(this.setupNextGalleryImages, this);
 
+        this.setupPrevGalleryImages = __bind(this.setupPrevGalleryImages, this);
+
         this.cacheNextGallery = __bind(this.cacheNextGallery, this);
+
+        this.cachePreviousGallery = __bind(this.cachePreviousGallery, this);
 
         this.get = __bind(this.get, this);
 
@@ -98,12 +104,29 @@
         });
       };
 
+      Photos.prototype.cachePreviousGallery = function() {
+        this.prevGalleryArray = this.allPhotosArray.slic(this.numOfPictures * (this.currentGalleryNumber - 1), this.currentGalleryNumber * this.numOfPictures);
+        return this.setupPrevGalleryImages();
+      };
+
       Photos.prototype.cacheNextGallery = function() {
-        console.log("Number Of Photos: ", this.allPhotosArray.length);
-        console.log("Gallery: ", this.currentGalleryNumber);
-        this.currentGalleryNumber += 1;
         this.nextGalleryArray = this.allPhotosArray.slice(this.numOfPictures * this.currentGalleryNumber, this.currentGalleryNumber * this.numOfPictures + this.numOfPictures);
-        return this.setupNextGalleryImages();
+        this.setupNextGalleryImages();
+        return this.currentGalleryNumber += 1;
+      };
+
+      Photos.prototype.setupPrevGalleryImages = function() {
+        var smallImgTags,
+          _this = this;
+        smallImgTags = this.domEditor.createTags(this.prevGalleryArray.slice(0, this.numOfPictures), "img", "small", "src");
+        smallImgTags = this.domEditor.wrapTags(smallImgTags, this.prevGalleryArray.slice(0, this.numOfPictures), "a", "big", "href");
+        this.galleryPrevious.setup(smallImgTags);
+        $(".forwardButton").on("click", function(event) {
+          return _this.switchToNextGallery();
+        });
+        return $(".backButton").on("click", function() {
+          return _this.switchToPreviousGallery();
+        });
       };
 
       Photos.prototype.setupNextGalleryImages = function() {
@@ -112,9 +135,23 @@
         smallImgTags = this.domEditor.createTags(this.nextGalleryArray.slice(0, this.numOfPictures), "img", "small", "src");
         smallImgTags = this.domEditor.wrapTags(smallImgTags, this.nextGalleryArray.slice(0, this.numOfPictures), "a", "big", "href");
         this.galleryNext.setup(smallImgTags);
-        return $(".forwardButton").on("click", function(event) {
+        $(".forwardButton").on("click", function(event) {
           return _this.switchToNextGallery();
         });
+        return $(".backButton").on("click", function() {
+          return _this.switchToPreviousGallery();
+        });
+      };
+
+      Photos.prototype.switchToPreviousGallery = function() {
+        this.gallery.hide();
+        this.galleryNext.setElement(this.gallery.getElement());
+        this.gallery.setElement(this.galleryPrevious.getElement());
+        this.gallery.display("body");
+        this.currentGalleryNumber -= 1;
+        if (this.currentGalleryNumber > 1) {
+          return this.cachePreviousGallery();
+        }
       };
 
       Photos.prototype.switchToNextGallery = function() {
@@ -122,7 +159,8 @@
         this.galleryPrevious.setElement(this.gallery.getElement());
         this.gallery.setElement(this.galleryNext.getElement());
         this.gallery.display("body");
-        if (this.allPhotosArray[(this.currentGalleryNumber + 1) * this.numOfPictures]) {
+        this.gallery.showPreviousButton();
+        if (this.allPhotosArray[this.currentGalleryNumber * this.numOfPictures]) {
           return this.cacheNextGallery();
         } else {
           return this.gallery.hideNextButton();

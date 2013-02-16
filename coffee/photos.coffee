@@ -46,13 +46,35 @@ define ["js/gallery", "js/manipulater"], (Gallery, Manipulater) ->
         error: () ->
           console.log("error")
       })
+
+    cachePreviousGallery : () =>
+      @prevGalleryArray = @allPhotosArray.slic(@numOfPictures * (@currentGalleryNumber-1 ),
+                                               @currentGalleryNumber * @numOfPictures)
+      @setupPrevGalleryImages()
     cacheNextGallery : ()=>
-      console.log "Number Of Photos: ", @allPhotosArray.length
-      console.log "Gallery: ", @currentGalleryNumber
-      @currentGalleryNumber += 1
       @nextGalleryArray = @allPhotosArray.slice(@numOfPictures * @currentGalleryNumber,
           @currentGalleryNumber * @numOfPictures + @numOfPictures) 
-      @setupNextGalleryImages()
+      @setupNextGalleryImages()         
+      @currentGalleryNumber += 1
+
+    setupPrevGalleryImages : () =>
+      smallImgTags = @domEditor.createTags(
+        @prevGalleryArray.slice(0,@numOfPictures),
+        "img",
+        "small",
+        "src")
+      smallImgTags = @domEditor.wrapTags(
+        smallImgTags,
+        @.prevGalleryArray.slice(0, @numOfPictures),
+        "a",
+        "big",
+        "href")
+      @galleryPrevious.setup(smallImgTags)
+      $(".forwardButton").on "click", (event) =>
+        @switchToNextGallery()
+      $(".backButton").on "click", () =>
+        @switchToPreviousGallery()
+
 
     setupNextGalleryImages : () =>
       smallImgTags = @domEditor.createTags(
@@ -69,13 +91,26 @@ define ["js/gallery", "js/manipulater"], (Gallery, Manipulater) ->
       @galleryNext.setup(smallImgTags)
       $(".forwardButton").on "click", (event) =>
         @switchToNextGallery()
-        
+      $(".backButton").on "click", () =>
+        @switchToPreviousGallery()
+
+    switchToPreviousGallery : () =>
+      @gallery.hide()
+      @galleryNext.setElement @gallery.getElement()
+      @gallery.setElement @galleryPrevious.getElement()
+      @gallery.display("body")
+      @currentGalleryNumber -= 1
+      if @currentGalleryNumber > 1
+        @cachePreviousGallery()
+      
+
     switchToNextGallery : () =>
       @gallery.hide()
       @galleryPrevious.setElement( @gallery.getElement() )
       @gallery.setElement( @galleryNext.getElement() )   
       @gallery.display("body")
-      if @allPhotosArray[ (@currentGalleryNumber + 1)  * @numOfPictures]
+      @gallery.showPreviousButton();
+      if @allPhotosArray[ (@currentGalleryNumber)  * @numOfPictures]
         @cacheNextGallery()
       else
         @gallery.hideNextButton();
