@@ -55,7 +55,6 @@ define ["js/gallery", "js/manipulater"], (Gallery, Manipulater) ->
       @nextGalleryArray = @allPhotosArray.slice(@numOfPictures * @currentGalleryNumber,
           @currentGalleryNumber * @numOfPictures + @numOfPictures) 
       @setupNextGalleryImages()         
-      @currentGalleryNumber += 1
 
     setupPrevGalleryImages : () =>
       smallImgTags = @domEditor.createTags(
@@ -88,25 +87,32 @@ define ["js/gallery", "js/manipulater"], (Gallery, Manipulater) ->
       @addListeners()
 
     switchToPreviousGallery : () =>
+      console.log("currentGallery Number: ", @currentGalleryNumber)
       @gallery.hide()
       @galleryNext.setElement @gallery.getElement()
       @gallery.setElement @galleryPrevious.getElement()
       @gallery.display("body")
       @currentGalleryNumber -= 1
-      if @currentGalleryNumber > 1
+      if @currentGalleryNumber >= 1
         @cachePreviousGallery()
+      else
+        @addListeners()
+        @gallery.hidePreviousButton()
       
 
     switchToNextGallery : () =>
+      console.log("currentGallery Number: ", @currentGalleryNumber)
       @gallery.hide()
       @galleryPrevious.setElement( @gallery.getElement() )
       @gallery.setElement( @galleryNext.getElement() )   
       @gallery.display("body")
       @gallery.showPreviousButton();
+      @currentGalleryNumber += 1
       if @allPhotosArray[ (@currentGalleryNumber)  * @numOfPictures]
         @cacheNextGallery()
       else
-        @gallery.hideNextButton();
+        @addListeners()
+        @gallery.hideNextButton()
 
     createButton : (container, listener) =>
       tinyImgTags = @domEditor.createTags( 

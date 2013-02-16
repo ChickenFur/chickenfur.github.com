@@ -113,8 +113,7 @@
 
       Photos.prototype.cacheNextGallery = function() {
         this.nextGalleryArray = this.allPhotosArray.slice(this.numOfPictures * this.currentGalleryNumber, this.currentGalleryNumber * this.numOfPictures + this.numOfPictures);
-        this.setupNextGalleryImages();
-        return this.currentGalleryNumber += 1;
+        return this.setupNextGalleryImages();
       };
 
       Photos.prototype.setupPrevGalleryImages = function() {
@@ -134,25 +133,32 @@
       };
 
       Photos.prototype.switchToPreviousGallery = function() {
+        console.log("currentGallery Number: ", this.currentGalleryNumber);
         this.gallery.hide();
         this.galleryNext.setElement(this.gallery.getElement());
         this.gallery.setElement(this.galleryPrevious.getElement());
         this.gallery.display("body");
         this.currentGalleryNumber -= 1;
-        if (this.currentGalleryNumber > 1) {
+        if (this.currentGalleryNumber >= 1) {
           return this.cachePreviousGallery();
+        } else {
+          this.addListeners();
+          return this.gallery.hidePreviousButton();
         }
       };
 
       Photos.prototype.switchToNextGallery = function() {
+        console.log("currentGallery Number: ", this.currentGalleryNumber);
         this.gallery.hide();
         this.galleryPrevious.setElement(this.gallery.getElement());
         this.gallery.setElement(this.galleryNext.getElement());
         this.gallery.display("body");
         this.gallery.showPreviousButton();
+        this.currentGalleryNumber += 1;
         if (this.allPhotosArray[this.currentGalleryNumber * this.numOfPictures]) {
           return this.cacheNextGallery();
         } else {
+          this.addListeners();
           return this.gallery.hideNextButton();
         }
       };
