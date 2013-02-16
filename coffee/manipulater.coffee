@@ -14,5 +14,15 @@ define () ->
       results
     injectInto  : (parentDiv, elements) ->
       $("#{parentDiv}").append(elements)
+    createBlogPosts : (anArray, tagType, titleKey, dateKey, linkKey) ->
+      results = ""
+      for n in anArray
+        results += "<#{tagType} class='blogPost'>" +
+                    "<a href=#{n[linkKey]}>" +
+                    "<span class='blogTitle'>#{n[titleKey]} </span>" +
+                    "<span class='blogDate'> #{moment(n[dateKey]).fromNow()} </span>" +
+                    "</a>" +
+                    "</#{tagType}>"
+
   return Manipulater
 

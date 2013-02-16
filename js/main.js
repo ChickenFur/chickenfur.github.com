@@ -2,12 +2,13 @@
 (function() {
 
   require(["js/blog", "js/manipulater", "js/photos", "js/projects"], function(Blog, Manipulater, Photos, Projects) {
-    var PICTURES_TO_DISPLAY_ON_BUTTON, addPhotoButtonListener, addProjectButtonListener, domEditor, myBlogs, myPhotos, myProjects;
+    var PICTURES_TO_DISPLAY_ON_BUTTON, POSTS_TO_DISPLAY, addPhotoButtonListener, addProjectButtonListener, domEditor, myBlogs, myPhotos, myProjects;
     PICTURES_TO_DISPLAY_ON_BUTTON = 9;
+    POSTS_TO_DISPLAY = 4;
     domEditor = new Manipulater();
     myPhotos = new Photos("wisechicken.tumblr.com", PICTURES_TO_DISPLAY_ON_BUTTON);
     myProjects = new Projects("wpdprojects.tumblr.com", PICTURES_TO_DISPLAY_ON_BUTTON);
-    myBlogs = Blog;
+    myBlogs = new Blog("whitepinedev.tumblr.com", POSTS_TO_DISPLAY);
     $.when(myPhotos.get()).done(function() {
       myPhotos.createButton("#photoButton", addPhotoButtonListener);
       return myPhotos.setupGallery();
@@ -15,6 +16,9 @@
     $.when(myProjects.get()).done(function() {
       myProjects.createButton('#projectsButton', addProjectButtonListener);
       return myProjects.setupGallery();
+    });
+    $.when(myBlogs.get()).done(function() {
+      return myBlogs.createButton('#techBlogButton');
     });
     addPhotoButtonListener = function() {
       return $("#photoButton").on("click", function(event) {

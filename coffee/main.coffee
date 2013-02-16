@@ -1,9 +1,10 @@
 require ["js/blog", "js/manipulater", "js/photos", "js/projects"] , (Blog, Manipulater, Photos, Projects) -> 
   PICTURES_TO_DISPLAY_ON_BUTTON = 9
+  POSTS_TO_DISPLAY = 4
   domEditor = new Manipulater()
   myPhotos = new Photos "wisechicken.tumblr.com", PICTURES_TO_DISPLAY_ON_BUTTON
   myProjects = new Projects "wpdprojects.tumblr.com", PICTURES_TO_DISPLAY_ON_BUTTON
-  myBlogs = Blog #"whitepinedev.tumblr.com"
+  myBlogs =  new Blog "whitepinedev.tumblr.com", POSTS_TO_DISPLAY
 
   ####
   #Page Loading
@@ -16,6 +17,9 @@ require ["js/blog", "js/manipulater", "js/photos", "js/projects"] , (Blog, Manip
   $.when(myProjects.get()).done(()->
       myProjects.createButton('#projectsButton', addProjectButtonListener )
       myProjects.setupGallery()
+    )
+  $.when(myBlogs.get()).done( ()->
+      myBlogs.createButton('#techBlogButton')
     )
 
   ######

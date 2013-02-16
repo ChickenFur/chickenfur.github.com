@@ -103,7 +103,24 @@ footer{
 .closeButton:hover, .forwardButton:hover, .backButton:hover{
 	cursor: pointer;
 }
-#techBlogImg {
-	width: 250px; 
-	height: 305px;
+.blogPost{
+	margin-top: 10px;
+	text-decoration: none;
+}
+
+.blogDate {
+	font-size: .4em;
+	text-decoration: none;
+}
+.blogTitle {
+	font-size: .6em;
+	text-decoration: none;
+
+}
+a {
+	text-decoration: none;
+}
+#techBlogButton{
+	padding-top: 40px;
+	overflow: hidden;
 }
