@@ -15,6 +15,7 @@ define ["js/gallery", "js/manipulater"], (Gallery, Manipulater) ->
       @smallImgTags
 
     format : (data, photoArray) =>
+
       photoArrays = [@currentGalleryArray, @nextGalleryArray]
       for post in data.posts
         if post.type is "photo"
@@ -46,28 +47,30 @@ define ["js/gallery", "js/manipulater"], (Gallery, Manipulater) ->
           console.log("error")
       })
     cacheNextGallery : ()=>
-      setupImages = () =>
-        smallImgTags = @domEditor.createTags(
-          @nextGalleryArray.slice(0,@numOfPictures),
-          "img",
-          "small",
-          "src")
-        smallImgTags = @domEditor.wrapTags(
-          smallImgTags,
-          @.nextGalleryArray.slice(0, @numOfPictures),
-          "a",
-          "big",
-          "href")
-        @galleryNext.setup(smallImgTags)
-        $(".forwardButton").on("click", (event) =>
-          @gallery.hide()
-          @galleryNext.display("body")
-          )
       if @numPicturesRetrieved < 18
         @get(@currentSetStartNum + @numOfPictures, 1, setupImages)  
       else
-        @nextGalleryArray = @currentGalleryArray.slice(0, @numOfPictures) 
-        setupImages()
+        @nextGalleryArray = @currentGalleryArray.slice(@numOfPictures, @numOfPictures + @numOfPictures) 
+        @setupImages()
+
+    setupImages : () =>
+      smallImgTags = @domEditor.createTags(
+        @nextGalleryArray.slice(0,@numOfPictures),
+        "img",
+        "small",
+        "src")
+      smallImgTags = @domEditor.wrapTags(
+        smallImgTags,
+        @.nextGalleryArray.slice(0, @numOfPictures),
+        "a",
+        "big",
+        "href")
+      @galleryNext.setup(smallImgTags)
+      $(".forwardButton").on("click", (event) =>
+        #debugger;
+        @gallery.hide()
+        @galleryNext.display("body")
+        )
 
     createButton : (container, listener) =>
       tinyImgTags = @domEditor.createTags( 
@@ -90,4 +93,5 @@ define ["js/gallery", "js/manipulater"], (Gallery, Manipulater) ->
         "href")
     setupGallery : () ->
       @gallery.setup(@smallImgTags)
+      @cacheNextGallery()
   return Photos

@@ -10,6 +10,8 @@
         this.source = source;
         this.createButton = __bind(this.createButton, this);
 
+        this.setupImages = __bind(this.setupImages, this);
+
         this.cacheNextGallery = __bind(this.cacheNextGallery, this);
 
         this.get = __bind(this.get, this);
@@ -88,24 +90,24 @@
       };
 
       Photos.prototype.cacheNextGallery = function() {
-        var setupImages,
-          _this = this;
-        setupImages = function() {
-          var smallImgTags;
-          smallImgTags = _this.domEditor.createTags(_this.nextGalleryArray.slice(0, _this.numOfPictures), "img", "small", "src");
-          smallImgTags = _this.domEditor.wrapTags(smallImgTags, _this.nextGalleryArray.slice(0, _this.numOfPictures), "a", "big", "href");
-          _this.galleryNext.setup(smallImgTags);
-          return $(".forwardButton").on("click", function(event) {
-            _this.gallery.hide();
-            return _this.galleryNext.display("body");
-          });
-        };
         if (this.numPicturesRetrieved < 18) {
           return this.get(this.currentSetStartNum + this.numOfPictures, 1, setupImages);
         } else {
-          this.nextGalleryArray = this.currentGalleryArray.slice(0, this.numOfPictures);
-          return setupImages();
+          this.nextGalleryArray = this.currentGalleryArray.slice(this.numOfPictures, this.numOfPictures + this.numOfPictures);
+          return this.setupImages();
         }
+      };
+
+      Photos.prototype.setupImages = function() {
+        var smallImgTags,
+          _this = this;
+        smallImgTags = this.domEditor.createTags(this.nextGalleryArray.slice(0, this.numOfPictures), "img", "small", "src");
+        smallImgTags = this.domEditor.wrapTags(smallImgTags, this.nextGalleryArray.slice(0, this.numOfPictures), "a", "big", "href");
+        this.galleryNext.setup(smallImgTags);
+        return $(".forwardButton").on("click", function(event) {
+          _this.gallery.hide();
+          return _this.galleryNext.display("body");
+        });
       };
 
       Photos.prototype.createButton = function(container, listener) {
@@ -118,7 +120,8 @@
       };
 
       Photos.prototype.setupGallery = function() {
-        return this.gallery.setup(this.smallImgTags);
+        this.gallery.setup(this.smallImgTags);
+        return this.cacheNextGallery();
       };
 
       return Photos;
