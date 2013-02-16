@@ -10,7 +10,7 @@
         this.source = source;
         this.createButton = __bind(this.createButton, this);
 
-        this.setupImages = __bind(this.setupImages, this);
+        this.setupNextGalleryImages = __bind(this.setupNextGalleryImages, this);
 
         this.cacheNextGallery = __bind(this.cacheNextGallery, this);
 
@@ -90,14 +90,14 @@
 
       Photos.prototype.cacheNextGallery = function() {
         if (this.numPicturesRetrieved < 18) {
-          return this.get(this.currentSetStartNum + this.numOfPictures, 1, setupImages);
+          return this.get(this.currentSetStartNum + this.numOfPictures, 1, this.setupImages);
         } else {
           this.nextGalleryArray = this.allPhotosArray.slice(this.numOfPictures, this.numOfPictures + this.numOfPictures);
-          return this.setupImages();
+          return this.setupNextGalleryImages();
         }
       };
 
-      Photos.prototype.setupImages = function() {
+      Photos.prototype.setupNextGalleryImages = function() {
         var smallImgTags,
           _this = this;
         smallImgTags = this.domEditor.createTags(this.nextGalleryArray.slice(0, this.numOfPictures), "img", "small", "src");

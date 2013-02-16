@@ -46,12 +46,12 @@ define ["js/gallery", "js/manipulater"], (Gallery, Manipulater) ->
       })
     cacheNextGallery : ()=>
       if @numPicturesRetrieved < 18
-        @get(@currentSetStartNum + @numOfPictures, 1, setupImages)  
+        @get(@currentSetStartNum + @numOfPictures, 1, @setupImages)  
       else
         @nextGalleryArray = @allPhotosArray.slice(@numOfPictures, @numOfPictures + @numOfPictures) 
-        @setupImages()
+        @setupNextGalleryImages()
 
-    setupImages : () =>
+    setupNextGalleryImages : () =>
       smallImgTags = @domEditor.createTags(
         @nextGalleryArray.slice(0,@numOfPictures),
         "img",

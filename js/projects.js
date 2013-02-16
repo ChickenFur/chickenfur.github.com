@@ -19,17 +19,15 @@
       };
 
       Projects.prototype.addTitle = function() {
-        var data, images, index, newImages, noCommas, _i, _len, _ref;
+        var data, images, index, _i, _len, _ref;
         images = this.smallImgTags.split('</a>');
         images.pop();
-        _ref = this.currentGalleryArray;
+        _ref = this.allPhotosArray;
         for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
           data = _ref[index];
-          images[index] = "<div> " + images[index] + ("</a> " + this.currentGalleryArray[index].caption + "</div>");
+          images[index] = "<div> " + images[index] + ("</a> " + this.allPhotosArray[index].caption + "</div>");
         }
-        newImages = images.join();
-        noCommas = newImages.replace(",", "");
-        return this.smallImgTags = noCommas;
+        return this.smallImgTags = images.join('');
       };
 
       return Projects;
