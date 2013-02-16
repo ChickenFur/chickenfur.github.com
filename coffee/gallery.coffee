@@ -21,6 +21,8 @@ define () ->
         )
     hide : () =>
       @element.detach()
+    hideNextButton : () =>
+      $(".forwardButton").hide()
 
     
 

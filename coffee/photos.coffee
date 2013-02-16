@@ -2,7 +2,7 @@ define ["js/gallery", "js/manipulater"], (Gallery, Manipulater) ->
   class Photos   
     constructor: (@source, numToDisplay) ->
       @currentGalleryNumber = 1
-      @NUM_TO_GET = 9
+      @NUM_TO_GET = 50
       @currentNumberPostsDownloaded = @NUM_TO_GET
       @numPicturesRetrieved=0
       @allPhotosArray = []
@@ -34,6 +34,7 @@ define ["js/gallery", "js/manipulater"], (Gallery, Manipulater) ->
                 big : photo["photo-url-1280"]}) 
     get : (startNum=0, callBack) =>
       unless startNum is 0
+        console.log "startNum", startNum
         @url = @url + "&start=#{startNum}"
       $.ajax( @url, {
         dataType:"jsonp"
@@ -46,17 +47,12 @@ define ["js/gallery", "js/manipulater"], (Gallery, Manipulater) ->
           console.log("error")
       })
     cacheNextGallery : ()=>
+      console.log "Number Of Photos: ", @allPhotosArray.length
+      console.log "Gallery: ", @currentGalleryNumber
       @currentGalleryNumber += 1
-      if @allPhotosArray.length < (@currentGalleryNumber * @numOfPictures)
-        @get @currentNumberPostsDownloaded + @NUM_TO_GET, () =>  
-          @currentNumberPostsDownloaded + @NUM_TO_GET
-          @nextGalleryArray = @allPhotosArray.slice(@numOfPictures * @currentGalleryNumber,
-            @currentGalleryNumber * @numOfPictures + @numOfPictures) 
-          @setupNextGalleryImages()
-      else
-        @nextGalleryArray = @allPhotosArray.slice(@numOfPictures * @currentGalleryNumber,
-            @currentGalleryNumber * @numOfPictures + @numOfPictures) 
-        @setupNextGalleryImages()
+      @nextGalleryArray = @allPhotosArray.slice(@numOfPictures * @currentGalleryNumber,
+          @currentGalleryNumber * @numOfPictures + @numOfPictures) 
+      @setupNextGalleryImages()
 
     setupNextGalleryImages : () =>
       smallImgTags = @domEditor.createTags(
@@ -72,14 +68,17 @@ define ["js/gallery", "js/manipulater"], (Gallery, Manipulater) ->
         "href")
       @galleryNext.setup(smallImgTags)
       $(".forwardButton").on "click", (event) =>
-        @switchGallery()
+        @switchToNextGallery()
         
-    switchGallery : () =>
-      @galleryPrevious.setElement( @gallery.getElement() )
-      @gallery.setElement( @galleryNext.getElement() )
+    switchToNextGallery : () =>
       @gallery.hide()
+      @galleryPrevious.setElement( @gallery.getElement() )
+      @gallery.setElement( @galleryNext.getElement() )   
       @gallery.display("body")
-      @cacheNextGallery()
+      if @allPhotosArray[ (@currentGalleryNumber + 1)  * @numOfPictures]
+        @cacheNextGallery()
+      else
+        @gallery.hideNextButton();
 
     createButton : (container, listener) =>
       tinyImgTags = @domEditor.createTags( 

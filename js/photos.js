@@ -10,7 +10,7 @@
         this.source = source;
         this.createButton = __bind(this.createButton, this);
 
-        this.switchGallery = __bind(this.switchGallery, this);
+        this.switchToNextGallery = __bind(this.switchToNextGallery, this);
 
         this.setupNextGalleryImages = __bind(this.setupNextGalleryImages, this);
 
@@ -21,7 +21,7 @@
         this.format = __bind(this.format, this);
 
         this.currentGalleryNumber = 1;
-        this.NUM_TO_GET = 9;
+        this.NUM_TO_GET = 50;
         this.currentNumberPostsDownloaded = this.NUM_TO_GET;
         this.numPicturesRetrieved = 0;
         this.allPhotosArray = [];
@@ -80,6 +80,7 @@
           startNum = 0;
         }
         if (startNum !== 0) {
+          console.log("startNum", startNum);
           this.url = this.url + ("&start=" + startNum);
         }
         return $.ajax(this.url, {
@@ -98,18 +99,11 @@
       };
 
       Photos.prototype.cacheNextGallery = function() {
-        var _this = this;
+        console.log("Number Of Photos: ", this.allPhotosArray.length);
+        console.log("Gallery: ", this.currentGalleryNumber);
         this.currentGalleryNumber += 1;
-        if (this.allPhotosArray.length < (this.currentGalleryNumber * this.numOfPictures)) {
-          return this.get(this.currentNumberPostsDownloaded + this.NUM_TO_GET, function() {
-            _this.currentNumberPostsDownloaded + _this.NUM_TO_GET;
-            _this.nextGalleryArray = _this.allPhotosArray.slice(_this.numOfPictures * _this.currentGalleryNumber, _this.currentGalleryNumber * _this.numOfPictures + _this.numOfPictures);
-            return _this.setupNextGalleryImages();
-          });
-        } else {
-          this.nextGalleryArray = this.allPhotosArray.slice(this.numOfPictures * this.currentGalleryNumber, this.currentGalleryNumber * this.numOfPictures + this.numOfPictures);
-          return this.setupNextGalleryImages();
-        }
+        this.nextGalleryArray = this.allPhotosArray.slice(this.numOfPictures * this.currentGalleryNumber, this.currentGalleryNumber * this.numOfPictures + this.numOfPictures);
+        return this.setupNextGalleryImages();
       };
 
       Photos.prototype.setupNextGalleryImages = function() {
@@ -119,16 +113,20 @@
         smallImgTags = this.domEditor.wrapTags(smallImgTags, this.nextGalleryArray.slice(0, this.numOfPictures), "a", "big", "href");
         this.galleryNext.setup(smallImgTags);
         return $(".forwardButton").on("click", function(event) {
-          return _this.switchGallery();
+          return _this.switchToNextGallery();
         });
       };
 
-      Photos.prototype.switchGallery = function() {
+      Photos.prototype.switchToNextGallery = function() {
+        this.gallery.hide();
         this.galleryPrevious.setElement(this.gallery.getElement());
         this.gallery.setElement(this.galleryNext.getElement());
-        this.gallery.hide();
         this.gallery.display("body");
-        return this.cacheNextGallery();
+        if (this.allPhotosArray[(this.currentGalleryNumber + 1) * this.numOfPictures]) {
+          return this.cacheNextGallery();
+        } else {
+          return this.gallery.hideNextButton();
+        }
       };
 
       Photos.prototype.createButton = function(container, listener) {
