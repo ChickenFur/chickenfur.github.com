@@ -21,7 +21,8 @@
         this.currentSetStartNum = 0;
         this.NUM_TO_GET = 9;
         this.numPicturesRetrieved = 0;
-        this.imgLinksRetrieved = false;
+        this.allPhotosArray = [];
+        this.prevGalleryArray = [];
         this.currentGalleryArray = [];
         this.nextGalleryArray = [];
         this.url = ("http://" + this.source + "/api/read/json?num=") + this.NUM_TO_GET;
@@ -33,14 +34,13 @@
       }
 
       Photos.prototype.format = function(data, photoArray) {
-        var photo, photoArrays, post, _i, _j, _len, _len1, _ref, _ref1;
-        photoArrays = [this.currentGalleryArray, this.nextGalleryArray];
+        var photo, post, _i, _j, _len, _len1, _ref, _ref1;
         _ref = data.posts;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           post = _ref[_i];
           if (post.type === "photo") {
             if (post.photos.length === 0) {
-              photoArrays[photoArray].push({
+              this.allPhotosArray.push({
                 tiny: post["photo-url-75"],
                 small: post["photo-url-250"],
                 big: post["photo-url-1280"],
@@ -50,7 +50,7 @@
               _ref1 = post.photos;
               for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
                 photo = _ref1[_j];
-                photoArrays[photoArray].push({
+                this.allPhotosArray.push({
                   tiny: photo["photo-url-75"],
                   small: photo["photo-url-250"],
                   big: photo["photo-url-1280"]
@@ -59,8 +59,7 @@
             }
           }
         }
-        this.imgLinksRetrieved = true;
-        return this.numPicturesRetrieved = photoArrays[photoArray].length;
+        return this.numPicturesRetrieved = this.allPhotosArray.length;
       };
 
       Photos.prototype.get = function(startNum, photoArray, callBack) {
@@ -78,7 +77,7 @@
           dataType: "jsonp",
           crossDomain: true,
           success: function(data) {
-            _this.format(data, photoArray);
+            _this.format(data);
             if (callBack) {
               return callBack();
             }
@@ -93,7 +92,7 @@
         if (this.numPicturesRetrieved < 18) {
           return this.get(this.currentSetStartNum + this.numOfPictures, 1, setupImages);
         } else {
-          this.nextGalleryArray = this.currentGalleryArray.slice(this.numOfPictures, this.numOfPictures + this.numOfPictures);
+          this.nextGalleryArray = this.allPhotosArray.slice(this.numOfPictures, this.numOfPictures + this.numOfPictures);
           return this.setupImages();
         }
       };
@@ -112,11 +111,11 @@
 
       Photos.prototype.createButton = function(container, listener) {
         var smallImgTags, tinyImgTags;
-        tinyImgTags = this.domEditor.createTags(this.currentGalleryArray.slice(0, this.numOfPictures), "img", "tiny", "src");
+        tinyImgTags = this.domEditor.createTags(this.allPhotosArray.slice(0, this.numOfPictures), "img", "tiny", "src");
         this.domEditor.injectInto(container, tinyImgTags);
         listener();
-        smallImgTags = this.domEditor.createTags(this.currentGalleryArray.slice(0, this.numOfPictures), "img", "small", "src");
-        return this.smallImgTags = this.domEditor.wrapTags(smallImgTags, this.currentGalleryArray.slice(0, this.numOfPictures), "a", "big", "href");
+        smallImgTags = this.domEditor.createTags(this.allPhotosArray.slice(0, this.numOfPictures), "img", "small", "src");
+        return this.smallImgTags = this.domEditor.wrapTags(smallImgTags, this.allPhotosArray.slice(0, this.numOfPictures), "a", "big", "href");
       };
 
       Photos.prototype.setupGallery = function() {
