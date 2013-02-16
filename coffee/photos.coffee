@@ -48,7 +48,7 @@ define ["js/gallery", "js/manipulater"], (Gallery, Manipulater) ->
       })
 
     cachePreviousGallery : () =>
-      @prevGalleryArray = @allPhotosArray.slic(@numOfPictures * (@currentGalleryNumber-1 ),
+      @prevGalleryArray = @allPhotosArray.slice(@numOfPictures * (@currentGalleryNumber-1 ),
                                                @currentGalleryNumber * @numOfPictures)
       @setupPrevGalleryImages()
     cacheNextGallery : ()=>
@@ -70,11 +70,7 @@ define ["js/gallery", "js/manipulater"], (Gallery, Manipulater) ->
         "big",
         "href")
       @galleryPrevious.setup(smallImgTags)
-      $(".forwardButton").on "click", (event) =>
-        @switchToNextGallery()
-      $(".backButton").on "click", () =>
-        @switchToPreviousGallery()
-
+      @addListeners()
 
     setupNextGalleryImages : () =>
       smallImgTags = @domEditor.createTags(
@@ -89,10 +85,7 @@ define ["js/gallery", "js/manipulater"], (Gallery, Manipulater) ->
         "big",
         "href")
       @galleryNext.setup(smallImgTags)
-      $(".forwardButton").on "click", (event) =>
-        @switchToNextGallery()
-      $(".backButton").on "click", () =>
-        @switchToPreviousGallery()
+      @addListeners()
 
     switchToPreviousGallery : () =>
       @gallery.hide()
@@ -137,4 +130,9 @@ define ["js/gallery", "js/manipulater"], (Gallery, Manipulater) ->
     setupGallery : () ->
       @gallery.setup(@smallImgTags)
       @cacheNextGallery()
+    addListeners : () =>
+      $(".forwardButton").on "click", (event) =>
+        @switchToNextGallery()
+      $(".backButton").on "click", () =>
+        @switchToPreviousGallery()
   return Photos

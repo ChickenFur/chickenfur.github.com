@@ -8,6 +8,8 @@
 
       function Photos(source, numToDisplay) {
         this.source = source;
+        this.addListeners = __bind(this.addListeners, this);
+
         this.createButton = __bind(this.createButton, this);
 
         this.switchToNextGallery = __bind(this.switchToNextGallery, this);
@@ -105,7 +107,7 @@
       };
 
       Photos.prototype.cachePreviousGallery = function() {
-        this.prevGalleryArray = this.allPhotosArray.slic(this.numOfPictures * (this.currentGalleryNumber - 1), this.currentGalleryNumber * this.numOfPictures);
+        this.prevGalleryArray = this.allPhotosArray.slice(this.numOfPictures * (this.currentGalleryNumber - 1), this.currentGalleryNumber * this.numOfPictures);
         return this.setupPrevGalleryImages();
       };
 
@@ -116,31 +118,19 @@
       };
 
       Photos.prototype.setupPrevGalleryImages = function() {
-        var smallImgTags,
-          _this = this;
+        var smallImgTags;
         smallImgTags = this.domEditor.createTags(this.prevGalleryArray.slice(0, this.numOfPictures), "img", "small", "src");
         smallImgTags = this.domEditor.wrapTags(smallImgTags, this.prevGalleryArray.slice(0, this.numOfPictures), "a", "big", "href");
         this.galleryPrevious.setup(smallImgTags);
-        $(".forwardButton").on("click", function(event) {
-          return _this.switchToNextGallery();
-        });
-        return $(".backButton").on("click", function() {
-          return _this.switchToPreviousGallery();
-        });
+        return this.addListeners();
       };
 
       Photos.prototype.setupNextGalleryImages = function() {
-        var smallImgTags,
-          _this = this;
+        var smallImgTags;
         smallImgTags = this.domEditor.createTags(this.nextGalleryArray.slice(0, this.numOfPictures), "img", "small", "src");
         smallImgTags = this.domEditor.wrapTags(smallImgTags, this.nextGalleryArray.slice(0, this.numOfPictures), "a", "big", "href");
         this.galleryNext.setup(smallImgTags);
-        $(".forwardButton").on("click", function(event) {
-          return _this.switchToNextGallery();
-        });
-        return $(".backButton").on("click", function() {
-          return _this.switchToPreviousGallery();
-        });
+        return this.addListeners();
       };
 
       Photos.prototype.switchToPreviousGallery = function() {
@@ -179,6 +169,16 @@
       Photos.prototype.setupGallery = function() {
         this.gallery.setup(this.smallImgTags);
         return this.cacheNextGallery();
+      };
+
+      Photos.prototype.addListeners = function() {
+        var _this = this;
+        $(".forwardButton").on("click", function(event) {
+          return _this.switchToNextGallery();
+        });
+        return $(".backButton").on("click", function() {
+          return _this.switchToPreviousGallery();
+        });
       };
 
       return Photos;
