@@ -23,7 +23,7 @@
         this.setup = __bind(this.setup, this);
 
         this.element = null;
-        this.navBar = "<div class='navHeader'><span class='backButton'><img src='./imgs/back.png'></span> \                <span class='forwardButton'><img src='./imgs/forward.png'></span>\                <span class='closeButton'><img src='imgs/close.png'></span></div>";
+        this.navBar = "<span class='navHeader'><span class='backButton'><img src='./imgs/back.png'></span> \                <span class='forwardButton'><img src='./imgs/forward.png'></span>\                <span class='closeButton'><img src='imgs/close.png'></span></span>";
       }
 
       Gallery.prototype.setElement = function(newElement) {

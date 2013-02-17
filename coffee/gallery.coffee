@@ -2,9 +2,9 @@ define () ->
   class Gallery
     constructor : (@name) ->
       @element = null
-      @navBar = "<div class='navHeader'><span class='backButton'><img src='./imgs/back.png'></span> \
+      @navBar = "<span class='navHeader'><span class='backButton'><img src='./imgs/back.png'></span> \
                 <span class='forwardButton'><img src='./imgs/forward.png'></span>\
-                <span class='closeButton'><img src='imgs/close.png'></span></div>"
+                <span class='closeButton'><img src='imgs/close.png'></span></span>"
     setElement : (newElement) ->
       @element = newElement
     getElement : () ->
