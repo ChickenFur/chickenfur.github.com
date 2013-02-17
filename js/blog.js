@@ -39,7 +39,8 @@
       Blog.prototype.createButton = function(container) {
         var postTags;
         postTags = this.domEditor.createBlogPosts(this.allPhotosArray.slice(0, this.numOfPictures), "div", "title", "date", "link");
-        return this.domEditor.injectInto(container, postTags);
+        this.domEditor.injectInto(container, postTags);
+        return this.domEditor.injectInto(container, "<p class='seeAll'> more posts ...<p>");
       };
 
       return Blog;

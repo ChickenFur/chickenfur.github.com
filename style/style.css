@@ -54,7 +54,7 @@ footer{
 
 }
 .buttons:hover{
-	opacity: .5;
+	opacity: .7;
 	cursor: pointer;
 }
 
@@ -103,24 +103,38 @@ footer{
 .closeButton:hover, .forwardButton:hover, .backButton:hover{
 	cursor: pointer;
 }
+
 .blogPost{
-	margin-top: 10px;
-	text-decoration: none;
+	margin-top: 30px;
+	margin-left: 5px;
+	display:block;
+	text-align: left;
+}
+.blogPost:hover{
+	opacity: .5;
 }
 
 .blogDate {
 	font-size: .4em;
-	text-decoration: none;
+	text-align: right;
+	float: right;
 }
 .blogTitle {
 	font-size: .6em;
 	text-decoration: none;
-
 }
 a {
 	text-decoration: none;
+	color: black;
+}
+.seeAll{
+	font-size: .4em;
+	float:right;
 }
 #techBlogButton{
 	padding-top: 40px;
 	overflow: hidden;
+}
+#techBlogButton:hover{
+	opacity: 1;
 }

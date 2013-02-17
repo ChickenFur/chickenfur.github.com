@@ -34,14 +34,13 @@
       };
 
       Manipulater.prototype.createBlogPosts = function(anArray, tagType, titleKey, dateKey, linkKey) {
-        var n, results, _i, _len, _results;
+        var n, results, _i, _len;
         results = "";
-        _results = [];
         for (_i = 0, _len = anArray.length; _i < _len; _i++) {
           n = anArray[_i];
-          _results.push(results += ("<" + tagType + " class='blogPost'>") + ("<a href=" + n[linkKey] + ">") + ("<span class='blogTitle'>" + n[titleKey] + " </span>") + ("<span class='blogDate'> " + (moment(n[dateKey]).fromNow()) + " </span>") + "</a>" + ("</" + tagType + ">"));
+          results += ("<" + tagType + " class='blogPost'>") + ("<a href=" + n[linkKey] + ">") + ("<span class='blogTitle'>" + n[titleKey] + " </span>") + ("<span class='blogDate'> " + (moment(n[dateKey]).fromNow()) + " </span>") + "</a>" + ("</" + tagType + ">");
         }
-        return _results;
+        return results;
       };
 
       return Manipulater;

@@ -16,5 +16,6 @@ define ["js/photos"], (Photos) ->
         "date",
         "link")
       @domEditor.injectInto(container, postTags)
+      @domEditor.injectInto(container, "<p class='seeAll'> more posts ...<p>")
 
   return Blog

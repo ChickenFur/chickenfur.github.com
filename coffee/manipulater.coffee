@@ -23,6 +23,7 @@ define () ->
                     "<span class='blogDate'> #{moment(n[dateKey]).fromNow()} </span>" +
                     "</a>" +
                     "</#{tagType}>"
+      results
 
   return Manipulater
 
