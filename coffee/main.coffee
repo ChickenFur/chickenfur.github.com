@@ -26,22 +26,27 @@ require ["js/blog", "js/manipulater", "js/photos", "js/projects"] , (Blog, Manip
   #Listeners
   ######
   addPhotoButtonListener = () ->
-     $("#photoButton").on("click", (event)->
+    $("#photoButton").on "click", (event)->
       console.log "Photo Clicked"
       $("#photoButton > img").addClass("gallery")
       myPhotos.gallery.display("body")
       myPhotos.gallery.hidePreviousButton();
       myPhotos.cacheNextGallery()
-      )
+      
+    $('#photosTitle').on "click", () ->
+      $("#photoButton").click()
+            
 
   addProjectButtonListener = () ->
-     $("#projectsButton").on("click", (event)->
+    $("#projectsButton").on "click", (event)->
       console.log "Photo Clicked"
       $("#photoButton > img").addClass("gallery")
       myProjects.gallery.display("body")
       myProjects.gallery.hidePreviousButton();
       myProjects.gallery.hidePreviousButton();
       myProjects.cacheNextGallery()
-      )
+     $('#projectsTitle').on "click", () ->
+      $("#projectsButton").click()
+      
 
 

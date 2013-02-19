@@ -21,22 +21,28 @@
       return myBlogs.createButton('#techBlogButton');
     });
     addPhotoButtonListener = function() {
-      return $("#photoButton").on("click", function(event) {
+      $("#photoButton").on("click", function(event) {
         console.log("Photo Clicked");
         $("#photoButton > img").addClass("gallery");
         myPhotos.gallery.display("body");
         myPhotos.gallery.hidePreviousButton();
         return myPhotos.cacheNextGallery();
       });
+      return $('#photosTitle').on("click", function() {
+        return $("#photoButton").click();
+      });
     };
     return addProjectButtonListener = function() {
-      return $("#projectsButton").on("click", function(event) {
+      $("#projectsButton").on("click", function(event) {
         console.log("Photo Clicked");
         $("#photoButton > img").addClass("gallery");
         myProjects.gallery.display("body");
         myProjects.gallery.hidePreviousButton();
         myProjects.gallery.hidePreviousButton();
         return myProjects.cacheNextGallery();
+      });
+      return $('#projectsTitle').on("click", function() {
+        return $("#projectsButton").click();
       });
     };
   });

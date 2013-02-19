@@ -110,7 +110,7 @@ a {
 	right: 5px;
 	opacity: .5;
 }
-.closeButton:hover, .forwardButton:hover, .backButton:hover{
+.closeButton:hover, .forwardButton:hover, .backButton:hover, .title:hover{
 	cursor: pointer;
 }
 
