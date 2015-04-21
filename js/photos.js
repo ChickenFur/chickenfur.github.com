@@ -167,7 +167,9 @@
         var smallImgTags, tinyImgTags;
         tinyImgTags = this.domEditor.createTags(this.allPhotosArray.slice(0, this.numOfPictures), "img", "tiny", "src");
         this.domEditor.injectInto(container, tinyImgTags);
-        listener();
+        if(listener){
+          listener();
+        }
         smallImgTags = this.domEditor.createTags(this.allPhotosArray.slice(0, this.numOfPictures), "img", "small", "src");
         return this.smallImgTags = this.domEditor.wrapTags(smallImgTags, this.allPhotosArray.slice(0, this.numOfPictures), "a", "big", "href");
       };

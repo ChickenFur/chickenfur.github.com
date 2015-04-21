@@ -10,7 +10,7 @@
     myProjects = new Projects("wpdprojects.tumblr.com", PICTURES_TO_DISPLAY_ON_BUTTON);
     myBlogs = new Blog("whitepinedev.tumblr.com", POSTS_TO_DISPLAY);
     $.when(myPhotos.get()).done(function() {
-      myPhotos.createButton("#photoButton", addPhotoButtonListener);
+      myPhotos.createButton("#photoButton");
       return myPhotos.setupGallery();
     });
     $.when(myProjects.get()).done(function() {
